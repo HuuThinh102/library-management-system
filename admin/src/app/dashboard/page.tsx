@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth/authOptions';
 import { redirect } from 'next/navigation';
-import { Box, Paper, Typography } from '@mui/material';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 
 export default async function DashboardPage() {
     const session = await getServerSession(authOptions);
@@ -10,35 +10,5 @@ export default async function DashboardPage() {
         redirect('/login');
     }
 
-    return (
-        <Box
-            sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                minHeight: '100vh',
-                bgcolor: 'background.default',
-            }}
-        >
-            <Paper elevation={3} sx={{ p: 4 }}>
-                <Typography variant="h2" gutterBottom>
-                    Welcome, {session.user.name}!
-                </Typography>
-                <Typography variant="body1">
-                    This is the Admin Dashboard.
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 2 }}>
-                    Username: {session.user.usr}
-                </Typography>
-                <Typography variant="body2">
-                    Role: {session.user.role}
-                </Typography>
-                {session.user.accessToken && (
-                    <Typography variant="body2">
-                        Access Token: {session.user.accessToken}
-                    </Typography>
-                )}
-            </Paper>
-        </Box>
-    );
+    return <DashboardLayout />;
 }

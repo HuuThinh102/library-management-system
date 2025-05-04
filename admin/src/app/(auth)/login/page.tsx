@@ -4,16 +4,20 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Box, Button, TextField, Typography, Paper, Divider } from '@mui/material';
+import toast from 'react-hot-toast';
+import Loading from '@/components/common/Loading';
 
 export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
 
     const handleCredentialsLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         const result = await signIn('credentials', {
             username,
@@ -21,13 +25,15 @@ export default function LoginPage() {
             redirect: false,
         });
 
-        console.log('SignIn result:', result);
+        setLoading(false);
 
         if (result?.error) {
             setError(result.error);
         } else if (result?.ok) {
+            toast.success('Login sucessfull!')
             router.push('/dashboard');
-            router.refresh();
+        } else {
+            setError('Unknown login error');
         }
     };
 
@@ -80,8 +86,9 @@ export default function LoginPage() {
                         color="primary"
                         fullWidth
                         sx={{ mt: 2 }}
+                        disabled={loading}
                     >
-                        Login
+                        {loading ? <Loading size={20} /> : 'Login'}
                     </Button>
                 </form>
                 <Divider sx={{ my: 2 }}>or</Divider>
