@@ -1,39 +1,44 @@
 'use client';
 
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Box, Button, TextField, Typography, Paper, Divider } from '@mui/material';
+import { Box, Button, TextField, Typography, Paper, Divider, Link } from '@mui/material';
 import toast from 'react-hot-toast';
 import Loading from '@/components/common/Loading';
 
+type LoginFormInputs = {
+    username: string;
+    password: string;
+};
+
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<LoginFormInputs>();
+
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
 
-    const handleCredentialsLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError('');
+    const onSubmit = async (data: LoginFormInputs) => {
         setLoading(true);
-
         const result = await signIn('credentials', {
-            username,
-            password,
+            username: data.username,
+            password: data.password,
             redirect: false,
         });
-
         setLoading(false);
 
         if (result?.error) {
-            setError(result.error);
+            toast.error(result.error);
         } else if (result?.ok) {
-            toast.success('Login sucessfull!')
+            toast.success('Login successful!');
             router.push('/dashboard');
         } else {
-            setError('Unknown login error');
+            toast.error('Unknown login error');
         }
     };
 
@@ -52,46 +57,49 @@ export default function LoginPage() {
             }}
         >
             <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
-                <Typography variant="h2" align="center" gutterBottom>
+                <Typography variant="h4" align="center" gutterBottom>
                     Admin Login
                 </Typography>
-                {error && (
-                    <Typography color="error" align="center" sx={{ mb: 2 }}>
-                        {error}
-                    </Typography>
-                )}
-                <form onSubmit={handleCredentialsLogin}>
+
+                <form onSubmit={handleSubmit(onSubmit)} noValidate>
                     <TextField
                         label="Username"
-                        variant="outlined"
                         fullWidth
                         margin="normal"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
+                        {...register('username', { required: 'Username is required' })}
+                        error={!!errors.username}
+                        helperText={errors.username?.message}
                     />
+
                     <TextField
                         label="Password"
                         type="password"
-                        variant="outlined"
                         fullWidth
                         margin="normal"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
+                        {...register('password', { required: 'Password is required' })}
+                        error={!!errors.password}
+                        helperText={errors.password?.message}
                     />
+
+                    <Box display="flex" justifyContent="flex-end" mt={1} mb={2}>
+                        <Link href="/forgot-password" variant="body2" underline="hover">
+                            Forgot password?
+                        </Link>
+                    </Box>
+
                     <Button
                         type="submit"
                         variant="contained"
                         color="primary"
                         fullWidth
-                        sx={{ mt: 2 }}
                         disabled={loading}
                     >
-                        {loading ? <Loading size={20} /> : 'Login'}
+                        {loading ? <Loading size={20} text='Loading...' /> : 'Login'}
                     </Button>
                 </form>
+
                 <Divider sx={{ my: 2 }}>or</Divider>
+
                 <Button
                     variant="contained"
                     color="secondary"

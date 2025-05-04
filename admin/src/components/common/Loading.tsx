@@ -4,9 +4,10 @@ import { CircularProgress, Box, Typography } from '@mui/material';
 
 interface LoadingProps {
     size?: number;
+    text?: string;
 }
 
-const Loading: React.FC<LoadingProps> = ({ size }) => {
+const Loading: React.FC<LoadingProps> = ({ size, text }) => {
     return (
         <Box
             sx={{
@@ -17,7 +18,7 @@ const Loading: React.FC<LoadingProps> = ({ size }) => {
         >
             <CircularProgress color="primary" size={size} />
             <Typography variant='subtitle2' sx={{ mr: 2 }}>
-                Loading...
+                {text}
             </Typography>
         </Box>
     );
