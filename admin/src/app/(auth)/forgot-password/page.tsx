@@ -31,14 +31,14 @@ export default function ForgotPasswordPage() {
             });
 
             if (response.ok) {
-                toast.success('Please check your email for reset instructions.');
+                toast.success('Vui lòng kiểm tra email để nhận mật khẩu mới.');
                 router.push('/login')
             } else {
                 const errorData = await response.json();
-                toast.error(errorData.message || 'Failed to send reset link');
+                toast.error(errorData.message || 'Gửi yêu cầu tạo lại mật khẩu thất bại');
             }
         } catch {
-            toast.error('Something went wrong.');
+            toast.error('Lỗi không thể tạo mật khẩu mới.');
         } finally {
             setLoading(false);
         }
@@ -56,11 +56,11 @@ export default function ForgotPasswordPage() {
         >
             <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Forgot Password
+                    QUÊN MẬT KHẨU
                 </Typography>
 
                 <Typography variant="body2" align="center" sx={{ mb: 2 }}>
-                    Enter your email to receive password reset instructions.
+                    Nhập email để nhận được mật khẩu mới.
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
                         fullWidth
                         margin="normal"
                         {...register('email', {
-                            required: 'Email is required',
+                            required: 'Vui lòng nhập Email',
                             pattern: {
                                 value: /^\S+@\S+$/i,
                                 message: 'Invalid email address',
@@ -88,7 +88,7 @@ export default function ForgotPasswordPage() {
                         sx={{ mt: 2 }}
                         disabled={loading}
                     >
-                        {loading ? <Loading size={20} text='Sending...' /> : 'Send Reset Link'}
+                        {loading ? <Loading size={20} text=' Đang gửi...' /> : 'Gửi yêu cầu'}
                     </Button>
                 </form>
             </Paper>

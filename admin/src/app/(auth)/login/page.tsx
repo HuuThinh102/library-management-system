@@ -33,13 +33,21 @@ export default function LoginPage() {
         setLoading(false);
 
         if (result?.error) {
-            toast.error(result.error);
+            try {
+                const jsonPart = result.error.split(':').slice(1).join(':').trim();
+                const parsed = JSON.parse(jsonPart);
+                toast.error(parsed.error);
+            } catch (e) {
+                console.error('Lỗi khi parse error:', e);
+                toast.error('Đăng nhập thất bại');
+            }
         } else if (result?.ok) {
-            toast.success('Login successful!');
-            router.push('/dashboard');
+            toast.success('Đăng nhập thành công');
+            router.push('/librarians');
         } else {
-            toast.error('Unknown login error');
+            toast.error('Lỗi đăng nhập');
         }
+
     };
 
     const handleGoogleLogin = async () => {
@@ -58,7 +66,7 @@ export default function LoginPage() {
         >
             <Paper elevation={3} sx={{ p: 4, maxWidth: 400, width: '100%' }}>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Admin Login
+                    ĐĂNG NHẬP
                 </Typography>
 
                 <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -66,7 +74,7 @@ export default function LoginPage() {
                         label="Username"
                         fullWidth
                         margin="normal"
-                        {...register('username', { required: 'Username is required' })}
+                        {...register('username', { required: 'Vui lòng nhập Username' })}
                         error={!!errors.username}
                         helperText={errors.username?.message}
                     />
@@ -76,14 +84,14 @@ export default function LoginPage() {
                         type="password"
                         fullWidth
                         margin="normal"
-                        {...register('password', { required: 'Password is required' })}
+                        {...register('password', { required: 'Vui lòng nhập Password' })}
                         error={!!errors.password}
                         helperText={errors.password?.message}
                     />
 
                     <Box display="flex" justifyContent="flex-end" mt={1} mb={2}>
                         <Link href="/forgot-password" variant="body2" underline="hover">
-                            Forgot password?
+                            Quên mật khẩu?
                         </Link>
                     </Box>
 
@@ -94,11 +102,11 @@ export default function LoginPage() {
                         fullWidth
                         disabled={loading}
                     >
-                        {loading ? <Loading size={20} text='Loading...' /> : 'Login'}
+                        {loading ? <Loading size={20} text=' Đang tải...' /> : 'Đăng nhập'}
                     </Button>
                 </form>
 
-                <Divider sx={{ my: 2 }}>or</Divider>
+                <Divider sx={{ my: 2 }}>hoặc</Divider>
 
                 <Button
                     variant="contained"
@@ -106,7 +114,7 @@ export default function LoginPage() {
                     fullWidth
                     onClick={handleGoogleLogin}
                 >
-                    Login with Google
+                    Đăng nhập bằng Google
                 </Button>
             </Paper>
         </Box>

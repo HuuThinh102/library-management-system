@@ -13,7 +13,7 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.username || !credentials?.password) {
-          throw new Error('Missing credentials');
+          throw new Error('Thiếu thông tin đăng nhập');
         }
 
         const response = await loginWithCredentials(credentials.username, credentials.password);

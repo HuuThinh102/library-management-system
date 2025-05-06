@@ -1,21 +1,22 @@
-import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  console.log('Middleware token:', token);
+export function middleware(req: NextRequest) {
+    const accessToken = req.cookies.get('accessToken')?.value;
+    console.log(accessToken,'oooooooooooooooooooooooooo');
+    
+    const { pathname } = req.nextUrl;
 
-  if (token && token.accessToken && (req.nextUrl.pathname === '/' || req.nextUrl.pathname === '/login')) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
-  }
+    if (accessToken && (pathname === '/' || pathname === '/login')) {
+      return NextResponse.redirect(new URL('/librarians', req.url));
+    }
 
-  if (!token || !token.accessToken && req.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/login', req.url));
-  }
+    if (!accessToken && pathname.startsWith('/librarians')) {
+      return NextResponse.redirect(new URL('/login', req.url));
+    }
 
-  return NextResponse.next();
+    return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/login', '/dashboard/:path*'],
+  matcher: ['/', '/login'],
 };
