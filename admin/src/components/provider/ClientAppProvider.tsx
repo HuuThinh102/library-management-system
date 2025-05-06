@@ -33,8 +33,6 @@ export default function ClientAppProvider({
             try {
                 Cookies.remove('access_token');
                 Cookies.remove('refresh_token');
-                Cookies.remove('next-auth.csrf-token');
-                Cookies.remove('next-auth.callback-url');
                 signOut({ callbackUrl: '/login' });
             } catch (error) {
                 console.error('Lỗi khi đăng xuất:', error);
