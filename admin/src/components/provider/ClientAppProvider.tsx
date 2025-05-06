@@ -35,7 +35,7 @@ export default function ClientAppProvider({
                 Cookies.remove('refresh_token');
                 signOut({ callbackUrl: '/login' });
             } catch (error) {
-                console.error('Lỗi khi đăng xuất:', error);
+                console.error('Lỗi khi đăng xuất nha:', error);
             }
         },
         signIn: () => signIn(),
