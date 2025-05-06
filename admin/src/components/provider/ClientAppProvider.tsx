@@ -21,8 +21,8 @@ export default function ClientAppProvider({
     session,
 }: ClientAppProviderProps) {
     const authentication = {
-        isAuthenticated: (session: Session | null) => !!session?.user,
-        getUser: (session: Session | null) =>
+        isAuthenticated: () => !!session?.user,
+        getUser: () =>
             session?.user
                 ? {
                     name: session.user.name || session.user.email || 'User',
