@@ -16,6 +16,9 @@
     "@mui/material": "^7.0.2",
     "@mui/material-nextjs": "^7.0.2",
     "@toolpad/core": "^0.14.0",
+    "axios": "^1.9.0",
+    "crypto-js": "^4.2.0",
+    "js-cookie": "^3.0.5",
     "next": "15.3.1",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
@@ -26,6 +29,8 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/crypto-js": "^4.2.2",
+    "@types/js-cookie": "^3.0.6",
     "@types/json-schema": "^7.0.15",
     "@types/node": "^20",
     "@types/react": "^19",

@@ -7,6 +7,9 @@ import { useRouter } from 'next/navigation';
 import { Box, Button, TextField, Typography, Paper, Divider, Link } from '@mui/material';
 import toast from 'react-hot-toast';
 import Loading from '@/components/common/Loading';
+import Cookies from 'js-cookie';
+import { getSession } from 'next-auth/react';
+import { encrypt } from '@/utils/encrypt';
 
 type LoginFormInputs = {
     username: string;
@@ -42,6 +45,13 @@ export default function LoginPage() {
                 toast.error('Đăng nhập thất bại');
             }
         } else if (result?.ok) {
+            const session = await getSession();
+
+            if (session?.user.accessToken && session?.user.refreshToken) {
+                Cookies.set('access_token', encrypt(session.user.accessToken), { secure: true, sameSite: 'strict' });
+                Cookies.set('refresh_token', encrypt(session.user.refreshToken), { secure: true, sameSite: 'strict' });
+            }
+
             toast.success('Đăng nhập thành công');
             router.push('/librarians');
         } else {
@@ -51,7 +61,7 @@ export default function LoginPage() {
     };
 
     const handleGoogleLogin = async () => {
-        await signIn('google', { callbackUrl: '/dashboard' });
+        await signIn('google', { callbackUrl: '/librarians' });
     };
 
     return (

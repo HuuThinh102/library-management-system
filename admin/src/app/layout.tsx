@@ -4,21 +4,8 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { authOptions } from '@/lib/auth/authOptions';
 import { getServerSession } from 'next-auth';
 import ClientAppProvider from '@/components/provider/ClientAppProvider';
+import { NAVIGATION } from '@/config/navigation';
 
-export const NAVIGATION = [
-    {
-        segment: 'librarians',
-        title: 'Thủ thư',
-    },
-    {
-        segment: 'students',
-        title: 'Sinh viên',
-    },
-    {
-        segment: 'books',
-        title: 'Sách',
-    },
-];
 
 export default async function RootLayout({
     children,

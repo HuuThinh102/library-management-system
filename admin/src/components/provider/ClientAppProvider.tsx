@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import ThemeRegistry from '@/components/theme/ThemeRegistry';
 import { signIn, signOut } from 'next-auth/react';
 import type { Session } from 'next-auth';
+import Cookies from 'js-cookie';
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 
 type ClientAppProviderProps = {
@@ -28,7 +29,17 @@ export default function ClientAppProvider({
                     email: session.user.email || '',
                 }
                 : null,
-        signOut: () => signOut(),
+        signOut: () => {
+            try {
+                Cookies.remove('access_token');
+                Cookies.remove('refresh_token');
+                Cookies.remove('next-auth.csrf-token');
+                Cookies.remove('next-auth.callback-url');
+                signOut({ callbackUrl: '/login' });
+            } catch (error) {
+                console.error('Lỗi khi đăng xuất:', error);
+            }
+        },
         signIn: () => signIn(),
     };
 

@@ -73,7 +73,7 @@ export const authOptions: AuthOptions = {
     },
     async redirect({ url, baseUrl }) {
       if (url.includes('/api/auth/callback') || url.includes('/login')) {
-        return `${baseUrl}/dashboard`;
+        return `${baseUrl}/librarians`;
       }
       return url;
     },
