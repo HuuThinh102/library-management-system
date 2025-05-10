@@ -1,3 +1,4 @@
+import { DataModel } from '@toolpad/core';
 import { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
@@ -12,7 +13,7 @@ declare module 'next-auth' {
     } & DefaultSession['user'];
   }
 
-  interface User {
+  interface User extends DataModel{
     id: string;
     usr: string;
     email?: string | null;
