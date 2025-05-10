@@ -1,19 +1,21 @@
+'use client';
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Crud, DataSourceCache } from '@toolpad/core/Crud';
+import { PageContainer } from '@toolpad/core/PageContainer';
+import { User } from 'next-auth';
+import { librariansDataSource } from '@/lib/dataSources/librarians';
 
 export default function StudentsPage() {
+    const userCache = new DataSourceCache();
+
     return (
-        <Box
-            sx={{
-                py: 4,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-            }}
-        >
-            <Typography>Sinh viên</Typography>
-        </Box>
+        <PageContainer title='Sinh viên'>
+            <Crud<User>
+                dataSource={librariansDataSource}
+                dataSourceCache={userCache}
+                rootPath="/students"
+                initialPageSize={2}
+            />
+        </PageContainer>
     );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { AppProvider } from '@toolpad/core';
+import { NextAppProvider } from '@toolpad/core/nextjs';
 import { Toaster } from 'react-hot-toast';
 import ThemeRegistry from '@/components/theme/ThemeRegistry';
 import { signIn, signOut } from 'next-auth/react';
@@ -20,17 +20,31 @@ export default function ClientAppProvider({
     navigation,
     session,
 }: ClientAppProviderProps) {
-    const authentication = {
-        isAuthenticated: () => !!session?.user,
-        getUser: () =>
-            session?.user
-                ? {
-                    name: session.user.name || session.user.email || 'User',
-                    email: session.user.email || '',
-                }
-                : null,
+
+    // Create the authentication object
+    const authentication = React.useMemo(() => ({
+        isAuthenticated: () => {
+            const isAuth = Boolean(session?.user);
+            console.log("isAuthenticated check:", isAuth);
+            return isAuth;
+        },
+        getUser: () => {
+            if (!session?.user) {
+
+                return null;
+            }
+
+            const user = {
+                name: session.user.name || session.user.email || 'User',
+                email: session.user.email || '',
+            };
+
+
+            return user;
+        },
         signOut: () => {
             try {
+
                 Cookies.remove('access_token');
                 Cookies.remove('refresh_token');
                 signOut({ callbackUrl: '/login' });
@@ -39,10 +53,10 @@ export default function ClientAppProvider({
             }
         },
         signIn: () => signIn(),
-    };
+    }), [session]);
 
     return (
-        <AppProvider
+        <NextAppProvider
             navigation={navigation}
             branding={{ title: 'Admin' }}
             session={session}
@@ -52,6 +66,6 @@ export default function ClientAppProvider({
                 {children}
             </ThemeRegistry>
             <Toaster position="top-right" reverseOrder={false} />
-        </AppProvider>
+        </NextAppProvider>
     );
 }

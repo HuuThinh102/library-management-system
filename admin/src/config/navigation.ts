@@ -8,6 +8,10 @@ export const NAVIGATION = [
         title: 'Sinh viên',
     },
     {
+        segment: 'categories',
+        title: 'Danh mục sách',
+    },
+    {
         segment: 'books',
         title: 'Sách',
     },
